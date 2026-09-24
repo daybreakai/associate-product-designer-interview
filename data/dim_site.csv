@@ -1,0 +1,5 @@
+site_id,name,geo,country,channel
+PLANT_01,Assembly Plant 01,Central,USA,Plant
+DC_NORTH,Regional DC - North,Northeast,USA,DC
+DC_SOUTH,Regional DC - South,Southeast,USA,DC
+DC_WEST,Regional DC - West,West,USA,DC

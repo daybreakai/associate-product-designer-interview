@@ -1,0 +1,6 @@
+customer_id,retailer_name,country
+CUST_MEGA,MegaMart,USA
+CUST_CLUB,ClubCo,USA
+CUST_NEST,HomeNest,USA
+CUST_STREAM,ShopStream,USA
+CUST_DIRECT,DirectWeb,USA

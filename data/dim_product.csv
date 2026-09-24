@@ -1,0 +1,37 @@
+product_id,name,brand,category,subcategory,status_code,lifecycle_stage,launch_date,discontinue_date,replaces_product_id,std_unit_cost,list_price
+NWO-1001,Northwind Outdoor Tents T897,Northwind Outdoor,Camp & Hike,Tents,Active,Growth,,,,78.3,199.65
+NWO-1002,Northwind Outdoor Sleeping Bags SB482,Northwind Outdoor,Camp & Hike,Sleeping Bags,Active,Mature,,,,49.39,141.74
+NWO-1003,Northwind Outdoor Backpacks B926,Northwind Outdoor,Camp & Hike,Backpacks,Inactive,EOL,,2025-10-06,,42.98,113.88
+NWO-1004,Northwind Outdoor Trekking Poles TP868,Northwind Outdoor,Camp & Hike,Trekking Poles,Active,Growth,,,,17.49,72.28
+NWO-1005,Northwind Outdoor Bike Helmets BH222,Northwind Outdoor,Cycling,Bike Helmets,Inactive,EOL,,2026-03-16,,23.67,99.65
+NWO-1006,Northwind Outdoor Bike Lights BL621,Northwind Outdoor,Cycling,Bike Lights,Active,Mature,,,,12.16,43.74
+NWO-1007,Northwind Outdoor Cargo Racks CR905,Northwind Outdoor,Cycling,Cargo Racks,Active,NPI,2025-12-01,,,33.5,111.08
+NWO-1008,Northwind Outdoor Kayaks K404,Northwind Outdoor,Water Sports,Kayaks,Active,Growth,,,,180.95,542.75
+NWO-1009,Northwind Outdoor Paddleboards P180,Northwind Outdoor,Water Sports,Paddleboards,Active,Growth,,,,185.88,492.62
+NWO-1010,Northwind Outdoor Coolers C341,Northwind Outdoor,Water Sports,Coolers,Active,Growth,,,,38.11,134.83
+NWO-1011,Northwind Outdoor Rain Jackets RJ394,Northwind Outdoor,Apparel,Rain Jackets,Active,Mature,,,,28.79,101.71
+NWO-1012,Northwind Outdoor Headlamps H676,Northwind Outdoor,Apparel,Headlamps,Active,Growth,,,,17.72,48.33
+NWO-1013,Northwind Outdoor Water Bottles WB336,Northwind Outdoor,Apparel,Water Bottles,Active,Mature,,,,6.13,33.4
+NWO-1014,Northwind Outdoor Tents T654,Northwind Outdoor,Camp & Hike,Tents,Inactive,EOL,,2026-01-26,,72.77,177.72
+NWO-1015,Northwind Outdoor Sleeping Bags SB245,Northwind Outdoor,Camp & Hike,Sleeping Bags,Active,Mature,,,,42.37,170.2
+NWO-1016,Northwind Outdoor Backpacks B694,Northwind Outdoor,Camp & Hike,Backpacks,Active,NPI,2025-10-06,,NWO-1003,42.04,109.85
+NWO-1017,Northwind Outdoor Trekking Poles TP617,Northwind Outdoor,Camp & Hike,Trekking Poles,Active,Mature,,,,15.96,75.46
+NWO-1018,Northwind Outdoor Bike Helmets BH560,Northwind Outdoor,Cycling,Bike Helmets,Active,NPI,2026-02-23,,NWO-1005,22.57,93.38
+NWO-1019,Northwind Outdoor Bike Lights BL767,Northwind Outdoor,Cycling,Bike Lights,Active,NPI,2025-08-18,,,13.66,33.4
+NWO-1020,Northwind Outdoor Cargo Racks CR527,Northwind Outdoor,Cycling,Cargo Racks,Active,Growth,,,,39.49,116.04
+NWO-1021,Northwind Outdoor Kayaks K988,Northwind Outdoor,Water Sports,Kayaks,Inactive,EOL,,2025-10-06,,154.9,536.74
+NWO-1022,Northwind Outdoor Paddleboards P547,Northwind Outdoor,Water Sports,Paddleboards,Active,Mature,,,,139.67,554.71
+NWO-1023,Northwind Outdoor Coolers C395,Northwind Outdoor,Water Sports,Coolers,Active,Mature,,,,39.74,130.23
+NWO-1024,Northwind Outdoor Rain Jackets RJ319,Northwind Outdoor,Apparel,Rain Jackets,Active,Growth,,,,41.14,111.55
+NWO-1025,Northwind Outdoor Headlamps H577,Northwind Outdoor,Apparel,Headlamps,Active,NPI,2025-07-07,,,16.54,56.56
+NWO-1026,Northwind Outdoor Water Bottles WB612,Northwind Outdoor,Apparel,Water Bottles,Active,Growth,,,,5.34,26.9
+NWO-1027,Northwind Outdoor Tents T986,Northwind Outdoor,Camp & Hike,Tents,Active,NPI,2025-12-15,,,76.08,193.7
+NWO-1028,Northwind Outdoor Sleeping Bags SB938,Northwind Outdoor,Camp & Hike,Sleeping Bags,Active,NPI,2025-12-01,,,49.24,147.34
+NWO-1029,Northwind Outdoor Backpacks B974,Northwind Outdoor,Camp & Hike,Backpacks,Active,Mature,,,,46.8,114.5
+NWO-1030,Northwind Outdoor Trekking Poles TP903,Northwind Outdoor,Camp & Hike,Trekking Poles,Inactive,EOL,,2026-01-26,,18.27,69.11
+NWO-1031,Northwind Outdoor Bike Helmets BH325,Northwind Outdoor,Cycling,Bike Helmets,Active,Mature,,,,22.7,103.29
+NWO-1032,Northwind Outdoor Bike Lights BL563,Northwind Outdoor,Cycling,Bike Lights,Inactive,EOL,,2026-04-06,,11.17,35.92
+NWO-1033,Northwind Outdoor Cargo Racks CR735,Northwind Outdoor,Cycling,Cargo Racks,Active,Mature,,,,34.14,127.5
+NWO-1034,Northwind Outdoor Kayaks K665,Northwind Outdoor,Water Sports,Kayaks,Inactive,EOL,,2026-04-20,,192.82,473.91
+NWO-1035,Northwind Outdoor Paddleboards P276,Northwind Outdoor,Water Sports,Paddleboards,Inactive,EOL,,2026-01-19,,139.4,527.03
+NWO-1036,Northwind Outdoor Coolers C729,Northwind Outdoor,Water Sports,Coolers,Active,Mature,,,,47.55,126.36

@@ -1,0 +1,9 @@
+[project]
+name = "associate-product-designer-interview"
+version = "0.1.0"
+description = "Daybreak Associate Product Designer take-home: vision, data, and a starter agent harness."
+requires-python = ">=3.12"
+dependencies = [
+    "anthropic>=0.40",
+    "pandas>=2.0",
+]

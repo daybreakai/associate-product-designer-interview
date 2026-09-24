@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Labor for Enterprise Planning — Daybreak</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --green:#39B15A; --green-dark:#067E27; --green-deep:#1C5128;
+    --green-card:#E8F8EC; --green-line:#9CD4A0;
+    --ink:#1C1B1B; --muted:#484646; --faint:#787776;
+    --canvas:#FCF8F8; --card:#FFFFFF; --border:#E5E2E2; --border-strong:#C8C6C6;
+    --red:#C0392B; --red-bg:#FDECEA;
+    --font:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{height:100%;}
+  body{font-family:var(--font);background:var(--canvas);color:var(--ink);overflow:hidden;}
+  .deck{position:fixed;inset:0;}
+  .slide{
+    position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;
+    background:var(--canvas);padding:6vh 8vw;opacity:0;transition:opacity .25s ease;
+  }
+  .slide.active{display:flex;opacity:1;}
+  .eyebrow{color:var(--green);font-weight:700;font-size:clamp(11px,1.1vw,15px);
+    letter-spacing:.14em;text-transform:uppercase;margin-bottom:14px;}
+  h1{font-weight:800;font-size:clamp(28px,4.2vw,60px);line-height:1.05;letter-spacing:-.01em;}
+  .sub{color:var(--muted);font-size:clamp(15px,1.7vw,24px);margin-top:16px;font-weight:400;line-height:1.4;}
+  .sub b{color:var(--ink);font-weight:700;}
+  .green{color:var(--green);} .em-green{color:var(--green);font-weight:700;}
+  /* logo */
+  .brandmark{display:inline-flex;align-items:center;gap:14px;}
+  .brandmark .wm{font-weight:700;letter-spacing:-.02em;}
+  .corner-logo{position:absolute;right:3.2vw;bottom:3vh;display:flex;align-items:center;gap:8px;
+    font-weight:700;font-size:16px;color:var(--ink);opacity:.9;}
+  /* nav */
+  .counter{position:absolute;left:3.2vw;bottom:3vh;color:var(--faint);font-size:13px;font-weight:500;
+    letter-spacing:.04em;}
+  .dots{position:absolute;left:50%;bottom:2.6vh;transform:translateX(-50%);display:flex;gap:8px;}
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--border-strong);cursor:pointer;border:none;padding:0;}
+  .dot.on{background:var(--green);width:22px;border-radius:4px;}
+  /* title slide */
+  .title-slide{align-items:center;text-align:center;}
+  .title-slide .brandmark{margin-bottom:7vh;font-size:clamp(22px,2.6vw,34px);}
+  .title-slide h1{font-size:clamp(34px,6vw,84px);}
+  .title-slide .tsub{color:var(--faint);font-size:clamp(14px,1.6vw,22px);margin-top:6vh;font-weight:500;}
+  /* stat cards */
+  .stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:5vh;}
+  .stat{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:30px 28px;}
+  .stat .name{color:var(--muted);font-weight:600;font-size:clamp(14px,1.3vw,18px);}
+  .stat .big{font-weight:800;font-size:clamp(40px,6vw,76px);line-height:1;margin:6px 0 14px;}
+  .stat .desc{color:var(--faint);font-size:clamp(12px,1.1vw,16px);line-height:1.45;}
+  .callout{margin-top:5vh;background:var(--green-card);border-left:5px solid var(--green);
+    border-radius:8px;padding:20px 26px;font-size:clamp(14px,1.5vw,21px);color:var(--ink);}
+  /* table */
+  table{width:100%;border-collapse:collapse;margin-top:4vh;font-size:clamp(13px,1.4vw,20px);}
+  thead th{text-align:left;color:var(--faint);font-weight:600;font-size:clamp(11px,1vw,14px);
+    text-transform:uppercase;letter-spacing:.06em;padding:0 18px 14px;border-bottom:1px solid var(--border);}
+  tbody td{padding:16px 18px;border-bottom:1px solid var(--border);}
+  tbody td:first-child{font-weight:700;}
+  tbody td:nth-child(2){color:var(--faint);}
+  tr.hot td{background:var(--green-card);}
+  tr.hot td:first-child{color:var(--green-deep);}
+  tr.hot td:last-child{color:var(--green);font-weight:800;}
+  tr.hot td:first-child{box-shadow:inset 4px 0 0 var(--green);}
+  .cap{text-align:center;color:var(--green);font-style:italic;font-weight:600;margin-top:3.5vh;
+    font-size:clamp(14px,1.4vw,20px);}
+  /* flow boxes (slide 4) */
+  .flow{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:center;gap:18px;margin-top:6vh;}
+  .box{border:1px solid var(--border);background:var(--card);border-radius:14px;padding:30px 24px;text-align:center;min-height:200px;
+    display:flex;flex-direction:column;justify-content:center;}
+  .box h3{font-size:clamp(18px,2vw,28px);font-weight:800;margin-bottom:10px;}
+  .box .meta{color:var(--faint);font-size:clamp(12px,1.1vw,16px);line-height:1.5;}
+  .box.bottleneck{background:var(--red-bg);border-color:#F5C6C0;position:relative;}
+  .pill{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--red);color:#fff;
+    font-size:11px;font-weight:700;letter-spacing:.1em;padding:5px 14px;border-radius:20px;white-space:nowrap;}
+  .arrow{color:var(--border-strong);font-size:30px;font-weight:700;}
+  .glyph{width:46px;height:46px;margin:0 auto 14px;color:var(--green);}
+  .box.bottleneck .glyph{color:var(--red);}
+  /* before/after (slide 5) */
+  .ba{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:5vh;}
+  .col{border-radius:16px;padding:34px 32px;}
+  .col.before{background:#F4F0EF;border:1px solid var(--border);}
+  .col.after{background:var(--green-card);border:1px solid var(--green-line);}
+  .col h3{font-size:clamp(20px,2.2vw,30px);font-weight:800;margin-bottom:22px;display:flex;align-items:center;gap:12px;}
+  .col ul{list-style:none;}
+  .col li{display:flex;align-items:center;gap:14px;padding:11px 0;font-size:clamp(14px,1.4vw,20px);color:var(--ink);}
+  .col li b{font-weight:800;}
+  .mk{flex:none;width:24px;height:24px;}
+  .x{color:#9a9a9a;} .ck{color:var(--green-dark);}
+  /* compounding (slide 6) */
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:7vh;position:relative;align-items:start;}
+  .step{text-align:center;position:relative;padding:0 10px;}
+  .step .circle{width:clamp(70px,8vw,108px);height:clamp(70px,8vw,108px);border-radius:50%;border:2px solid var(--border);
+    background:var(--card);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;color:var(--green);}
+  .step .circle svg{width:46%;height:46%;}
+  .step h4{font-size:clamp(16px,1.7vw,24px);font-weight:800;}
+  .step p{color:var(--faint);font-size:clamp(11px,1.1vw,15px);margin-top:6px;line-height:1.4;}
+  .step .seg{position:absolute;top:clamp(35px,4vw,54px);right:-50%;width:100%;height:2px;background:var(--border);z-index:0;}
+  .step:last-child .seg{display:none;}
+  .loop{margin-top:30px;text-align:center;color:var(--green);font-weight:700;font-size:clamp(13px,1.3vw,18px);}
+  .loop::before{content:"↻ ";}
+  /* landscape (slide 7) */
+  .cols{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:22px;margin-top:3.5vh;}
+  .colhead{color:var(--green);font-weight:700;font-size:clamp(11px,1vw,14px);text-transform:uppercase;
+    letter-spacing:.07em;margin-bottom:12px;}
+  .lcard{border:1px solid var(--border);background:var(--card);border-radius:10px;padding:13px 15px;margin-bottom:10px;}
+  .lcard .t{font-weight:700;font-size:clamp(13px,1.25vw,17px);}
+  .lcard .r{color:var(--faint);font-size:clamp(10px,1vw,13px);margin-top:3px;}
+  .lcard.today{background:var(--green-card);border-color:var(--green-line);}
+  .lcard.extend{border-style:dashed;border-color:var(--green);}
+  .tag{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+    padding:2px 8px;border-radius:10px;margin-bottom:6px;}
+  .tag.now{background:var(--green);color:#fff;} .tag.next{background:#fff;color:var(--green-deep);border:1px solid var(--green);}
+  .handoff{margin-top:3.5vh;background:var(--green-card);border-left:5px solid var(--green);border-radius:8px;
+    padding:18px 24px;font-size:clamp(13px,1.35vw,19px);color:var(--ink);line-height:1.5;}
+  .handoff b{color:var(--green-deep);}
+  /* slide 7 fits top-aligned and compact */
+  .s7{justify-content:flex-start;padding-top:4.5vh;padding-bottom:8vh;}
+  .s7 h1{font-size:clamp(22px,3.1vw,40px);}
+  .s7 .cols{margin-top:2.4vh;}
+  .s7 .lcard{padding:9px 13px;margin-bottom:8px;}
+  .s7 .lcard .r{margin-top:2px;}
+  .s7 .handoff{margin-top:2.4vh;padding:13px 20px;font-size:clamp(12px,1.15vw,16px);}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute;">
+  <symbol id="db-logo" viewBox="0 0 56 56">
+    <circle cx="28" cy="28" r="28" fill="#39B15A"/>
+    <path d="M0 28 a28 28 0 0 1 56 0 Z" fill="#067E27"/>
+    <path d="M14 28 a14 14 0 0 1 28 0 Z" fill="#FFFFFF"/>
+  </symbol>
+</svg>
+
+<div class="deck" id="deck">
+
+  <!-- 1 — Title -->
+  <section class="slide title-slide">
+    <div class="brandmark"><svg style="width:1.4em;height:1.4em"><use href="#db-logo"/></svg><span class="wm">daybreak</span></div>
+    <h1>AI Labor for<br><span class="green">Enterprise Planning</span></h1>
+    <div class="tsub">Governed Decision Ownership</div>
+  </section>
+
+  <!-- 2 — The precedent -->
+  <section class="slide">
+    <div class="eyebrow">The Precedent</div>
+    <h1>Software Engineering: The Preview</h1>
+    <p class="sub">In late 2023, 6% of committed code was AI-generated. By 2025, it reached 42%. <b>A 7x increase in two years.</b></p>
+    <div class="stat-row">
+      <div class="stat"><div class="name">Google</div><div class="big green">50%</div><div class="desc">of code now written by agents. Internal platform Antigravity hit 1.5M weekly active users.</div></div>
+      <div class="stat"><div class="name">Anthropic</div><div class="big green">90%</div><div class="desc">of code written by AI. Engineers say the real number is closer to 100%.</div></div>
+      <div class="stat"><div class="name">Block</div><div class="big green">40%</div><div class="desc">headcount reduction. Cut from 10,000+ to under 6,000 citing &lsquo;intelligence tools&rsquo;.</div></div>
+    </div>
+    <div class="callout">Planning is more structured, bounded, and repetitive than software engineering. <b>Agents will absorb it faster.</b></div>
+    <div class="corner-logo"><svg style="width:24px;height:24px"><use href="#db-logo"/></svg>daybreak</div>
+  </section>
+
+  <!-- 3 — Every category under attack -->
+  <section class="slide">
+    <h1>Every Category Is Under Attack</h1>
+    <p class="sub">High language density + repetitive reasoning + human-entered data = <span class="em-green">vulnerable to agents</span>.</p>
+    <table>
+      <thead><tr><th>Category</th><th>Incumbent</th><th>AI-Native Attacker</th></tr></thead>
+      <tbody>
+        <tr><td>CRM</td><td>Salesforce</td><td>11x, Artisan, Sweep</td></tr>
+        <tr><td>Legal</td><td>Thomson Reuters</td><td>Harvey, Hebbia</td></tr>
+        <tr><td>ERP / Finance</td><td>SAP, NetSuite</td><td>DualEntry, Ramp</td></tr>
+        <tr><td>Customer Support</td><td>Zendesk</td><td>AI-native agents</td></tr>
+        <tr><td>Dev Tools</td><td>Legacy IDEs</td><td>Cursor, Devin</td></tr>
+        <tr class="hot"><td>Supply Chain Planning</td><td>Kinaxis, Blue Yonder, SAP</td><td>Daybreak</td></tr>
+      </tbody>
+    </table>
+    <div class="cap">Supply chain planning has all three.</div>
+    <div class="corner-logo"><svg style="width:24px;height:24px"><use href="#db-logo"/></svg>daybreak</div>
+  </section>
+
+  <!-- 4 — People as middleware -->
+  <section class="slide" style="text-align:center;">
+    <h1 style="margin:0 auto;">The Problem: People as &ldquo;Middleware&rdquo;</h1>
+    <p class="sub" style="margin:16px auto 0;">Dozens of people, multiple systems, no memory of what worked.</p>
+    <div class="flow">
+      <div class="box">
+        <svg class="glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="13" x2="9" y2="17"/><line x1="15" y1="13" x2="15" y2="17"/></svg>
+        <h3>Planning Systems</h3><div class="meta">SAP, o9, BlueYonder, Kinaxis</div>
+      </div>
+      <div class="arrow">&rarr;</div>
+      <div class="box bottleneck">
+        <span class="pill">THE BOTTLENECK</span>
+        <svg class="glyph" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="7" r="4"/><path d="M4 21v-1a8 8 0 0116 0v1z"/></svg>
+        <h3>People</h3><div class="meta">Context lost every cycle<br>Overrides unmeasured<br>50%+ of edits destroy value</div>
+      </div>
+      <div class="arrow">&rarr;</div>
+      <div class="box">
+        <svg class="glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 16V8a2 2 0 00-1-1.7l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.7l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><path d="M3.3 7L12 12l8.7-5M12 22V12"/></svg>
+        <h3>Execution</h3><div class="meta">ERP (SAP, Oracle)</div>
+      </div>
+    </div>
+    <div class="corner-logo"><svg style="width:24px;height:24px"><use href="#db-logo"/></svg>daybreak</div>
+  </section>
+
+  <!-- 5 — Operating model shift -->
+  <section class="slide" style="text-align:center;">
+    <h1 style="margin:0 auto;">The Operating Model Shift</h1>
+    <div class="ba" style="text-align:left;">
+      <div class="col before">
+        <h3><svg class="mk x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7l8 6 8-6"/><path d="M4 17h16"/></svg>Before</h3>
+        <ul>
+          <li><svg class="mk x" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10" opacity=".25"/><path d="M15 9l-6 6M9 9l6 6" stroke="#fff" stroke-width="2"/></svg>Systems output numbers</li>
+          <li><svg class="mk x" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10" opacity=".25"/><path d="M15 9l-6 6M9 9l6 6" stroke="#fff" stroke-width="2"/></svg>Humans make every decision</li>
+          <li><svg class="mk x" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10" opacity=".25"/><path d="M15 9l-6 6M9 9l6 6" stroke="#fff" stroke-width="2"/></svg>All items manually reviewed</li>
+          <li><svg class="mk x" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10" opacity=".25"/><path d="M15 9l-6 6M9 9l6 6" stroke="#fff" stroke-width="2"/></svg>Judgment unmeasured</li>
+          <li><svg class="mk x" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10" opacity=".25"/><path d="M15 9l-6 6M9 9l6 6" stroke="#fff" stroke-width="2"/></svg>Context lost every cycle</li>
+        </ul>
+      </div>
+      <div class="col after">
+        <h3><svg class="mk" viewBox="0 0 56 56"><use href="#db-logo"/></svg>After</h3>
+        <ul>
+          <li><svg class="mk ck" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/><path d="M7 12l3.5 3.5L17 9" stroke="#fff" stroke-width="2" fill="none"/></svg>Agents make baseline decisions</li>
+          <li><svg class="mk ck" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/><path d="M7 12l3.5 3.5L17 9" stroke="#fff" stroke-width="2" fill="none"/></svg>Humans govern risk &amp; exceptions</li>
+          <li><svg class="mk ck" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/><path d="M7 12l3.5 3.5L17 9" stroke="#fff" stroke-width="2" fill="none"/></svg>70% auto-accepted, 30% reviewed</li>
+          <li><svg class="mk ck" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/><path d="M7 12l3.5 3.5L17 9" stroke="#fff" stroke-width="2" fill="none"/></svg>Every override measured</li>
+          <li><svg class="mk ck" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/><path d="M7 12l3.5 3.5L17 9" stroke="#fff" stroke-width="2" fill="none"/></svg><b>Compounding memory across cycles</b></li>
+        </ul>
+      </div>
+    </div>
+    <div class="corner-logo"><svg style="width:24px;height:24px"><use href="#db-logo"/></svg>daybreak</div>
+  </section>
+
+  <!-- 6 — Compounding judgment -->
+  <section class="slide" style="text-align:center;">
+    <h1 style="margin:0 auto;">Compounding Judgment</h1>
+    <p class="sub" style="margin:16px auto 0;">Every cycle the system gets smarter. Legacy systems reset to zero.</p>
+    <div class="steps">
+      <div class="step"><span class="seg"></span><div class="circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v12c0 1.7 3.6 3 8 3s8-1.3 8-3V6"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg></div><h4>Ingest</h4><p>Quantitative &amp; qualitative signals</p></div>
+      <div class="step"><span class="seg"></span><div class="circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 3a3 3 0 00-3 3 3 3 0 00-1 5.8A3 3 0 008 17a3 3 0 004 1 3 3 0 004-1 3 3 0 003-5.2A3 3 0 0015 3a3 3 0 00-6 0z"/></svg></div><h4>Decide</h4><p>Agent makes baseline decision</p></div>
+      <div class="step"><span class="seg"></span><div class="circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l8 3v5c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/></svg></div><h4>Govern</h4><p>Human judgment captured</p></div>
+      <div class="step"><span class="seg"></span><div class="circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 19V5M4 19h16M8 16l3-4 3 2 4-6"/></svg></div><h4>Score</h4><p>Learn from outcomes</p></div>
+    </div>
+    <div class="loop">Compounds back into the next cycle</div>
+    <div class="corner-logo"><svg style="width:24px;height:24px"><use href="#db-logo"/></svg>daybreak</div>
+  </section>
+
+  <!-- 7 — Where Dawn lives today, and where we extend -->
+  <section class="slide s7">
+    <div class="eyebrow">The Landscape</div>
+    <h1>Where Dawn Lives Today — and Where We Extend</h1>
+    <div class="cols">
+      <div>
+        <div class="colhead">Demand-Side Activities</div>
+        <div class="lcard extend"><span class="tag next">Where we extend</span><div class="t">Promotion Planning</div><div class="r">What to promote, where, when, how deep — and what it does to demand</div></div>
+        <div class="lcard extend"><span class="tag next">Where we extend</span><div class="t">Product Lifecycle Management</div><div class="r">Launches, run-downs, replacements, assortment</div></div>
+        <div class="lcard today"><span class="tag now">Daybreak today</span><div class="t">Demand Management</div><div class="r">Dawn — review, triage &amp; edit the forecast; lock the cycle</div></div>
+        <div class="lcard"><div class="t">Forecasting</div><div class="r">Statistical ML baseline (DPP)</div></div>
+      </div>
+      <div>
+        <div class="colhead">Priority Planning</div>
+        <div class="lcard extend"><span class="tag next">Where we extend</span><div class="t">Supply Planning</div><div class="r">Replenishment / DRP — turn the demand plan into orders</div></div>
+        <div class="lcard"><div class="t">S&amp;OP</div><div class="r">Monthly consensus close</div></div>
+        <div class="lcard"><div class="t">Master Scheduling</div><div class="r">Production schedule by week</div></div>
+      </div>
+      <div>
+        <div class="colhead">Capacity Planning</div>
+        <div class="lcard"><div class="t">Resource Planning</div><div class="r">Long-range capacity</div></div>
+        <div class="lcard"><div class="t">Capacity Requirements</div><div class="r">Work center &times; shift</div></div>
+        <div class="lcard"><div class="t">Execution</div><div class="r">Buy, build, ship</div></div>
+      </div>
+    </div>
+    <div class="handoff">Today, Dawn focuses on demand forecasting — reviewing, triaging, and editing forecasts, via email or in Daybreak's Decision System. We're extending into adjacent, tightly-coupled use cases. <b>Your turn → see README.md.</b></div>
+    <div class="corner-logo"><svg style="width:24px;height:24px"><use href="#db-logo"/></svg>daybreak</div>
+  </section>
+
+</div>
+
+<div class="counter" id="counter">1 / 7</div>
+<div class="dots" id="dots"></div>
+
+<script>
+  const slides=[...document.querySelectorAll('.slide')];
+  const counter=document.getElementById('counter');
+  const dotsWrap=document.getElementById('dots');
+  let i=0;
+  slides.forEach((_,n)=>{const b=document.createElement('button');b.className='dot';b.onclick=()=>go(n);dotsWrap.appendChild(b);});
+  const dots=[...dotsWrap.children];
+  function go(n){i=Math.max(0,Math.min(slides.length-1,n));
+    slides.forEach((s,k)=>s.classList.toggle('active',k===i));
+    dots.forEach((d,k)=>d.classList.toggle('on',k===i));
+    counter.textContent=(i+1)+' / '+slides.length;}
+  document.addEventListener('keydown',e=>{
+    if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(i+1);}
+    if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(i-1);}
+    if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+  });
+  document.querySelector('.deck').addEventListener('click',e=>{
+    if(e.target.closest('.dot'))return; go(i + (e.clientX < window.innerWidth*0.25 ? -1 : 1));
+  });
+  const start=new URLSearchParams(location.search).get('s');
+  go(start ? parseInt(start,10)-1 : 0);
+</script>
+</body>
+</html>
